@@ -16,7 +16,7 @@ router.get('/load', (req, res) => {
       id: schedules.maxId + 1,
       templateId: 1,
       startOnDay: 1,
-      completeDays: [ 1, 2 ],
+      completedDays: [ 1, 2 ],
       startDate: '2017-01-01',
    };
 
@@ -69,7 +69,7 @@ router.post('/', (req, res) => {
       id: schedules.maxId + 1,
       templateId: req.body.schedule.templateId,
       startOnDay: req.body.schedule.startOnDay,
-      completeDays: req.body.schedule.completeDays,
+      completedDays: req.body.schedule.completedDays,
       startDate: req.body.schedule.startDate,
    };
 
@@ -89,9 +89,14 @@ router.put('/:id', (req, res, next) => {
      return;
    }
 
+   if (!req.body.schedule) {
+      res.json({ error: "schedule not included" });
+      return;
+   }
+
    schedule.templateId = req.body.schedule.templateId || schedule.templateId;
    schedule.startOnDay = req.body.schedule.startOnDay || schedule.startOnDay;
-   schedule.completeDays = req.body.schedule.completeDays || schedule.completeDays;
+   schedule.completedDays = req.body.schedule.completedDays || schedule.completedDays;
    schedule.startDate = req.body.schedule.startDate || schedule.startDate;
 
    schedules.update(schedule);

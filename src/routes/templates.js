@@ -1,41 +1,21 @@
 var express = require('express'),
     router = express.Router(),
     _ = require('lodash')
+    initialTemplates = require('../initial-data/templates'),
     path = require('path'),
     loki = require('lokijs'),
     dbPath = path.join(__dirname, '../db/bible-reading.json'),
     db = new loki(dbPath, { autosave: true, autoload: true, autosaveInterval: 1000 });
 
 router.get('/load', (req, res) => {
-   var templates, template;
+   var templates;
 
    db.removeCollection('templates');
    templates = db.addCollection('templates');
 
-   template = {
-      id: templates.maxId + 1,
-      name: 'Bethel Bible Reading',
-      days: [
-         {
-            order: 1,
-            reading: 'Gen 1-3',
-         },
-         {
-            order: 2,
-            reading: 'Gen 4-6',
-         },
-         {
-            order: 3,
-            reading: 'Gen 7-8',
-         },
-         {
-            order: 4,
-            reading: 'Gen 9-12',
-         },
-      ],
-   };
-
-   templates.insert(template);
+   initialTemplates.forEach((template) => {
+      templates.insert(template);
+   });
 
    db.saveDatabase();
 
