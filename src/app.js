@@ -1,11 +1,10 @@
 var express = require('express');
-    path = require('path'),
-    favicon = require('serve-favicon'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
     templates = require('./routes/templates'),
+    schedules = require('./routes/schedules'),
     app = express();
 
 app.use(logger('dev'));
@@ -20,19 +19,22 @@ app.get('/ping', (req, res) => {
 });
 
 app.use('/api/v1/templates', templates);
+app.use('/api/v1/schedules', schedules);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+   var err = new Error('Not Found');
+   err.status = 404;
+   next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // render the error page
-  res.status(err.status || 500);
-  res.json({ error: err, message: err.message });
+   // render the error page
+   console.log(err);
+
+   res.status(err.status || 500);
+   res.json({ error: err, message: err.message });
 });
 
 module.exports = app;
